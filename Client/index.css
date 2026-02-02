@@ -1,22 +1,19 @@
-html, body {
+body {
   margin: 0;
-  padding: 0;
-  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+#toolbar {
+  padding: 10px;
+  background: #f0f0f0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 #canvas {
   display: block;
-}
-
-#undoBtn {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-  padding: 8px 12px;
-}
-#canvas {
-  display: block;
-  border: 1px solid #ccc;
+  background: white;
+  cursor: crosshair;
 }
 

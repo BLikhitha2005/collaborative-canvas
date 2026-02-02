@@ -1,7 +1,6 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const rooms = require("./rooms");
 
 const app = express();
 const server = http.createServer(app);
@@ -10,23 +9,22 @@ const io = new Server(server, {
 });
 
 io.on("connection", socket => {
-  const room = rooms.default;
+  console.log("User connected:", socket.id);
 
-  socket.emit("history", room.getAll());
-
-  socket.on("draw", stroke => {
-    stroke.userId = socket.id;
-    room.addStroke(stroke);
-    io.emit("draw", stroke);
+  socket.on("draw", data => {
+    socket.broadcast.emit("draw", data);
   });
 
-  socket.on("undo", () => {
-    room.undo(socket.id);
-    io.emit("history", room.getAll());
+  socket.on("cursor", data => {
+    socket.broadcast.emit("cursor", {
+      id: socket.id,
+      x: data.x,
+      y: data.y
+    });
   });
 
-  socket.on("cursor", pos => {
-    socket.broadcast.emit("cursor", { id: socket.id, pos });
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("user-left", socket.id);
   });
 });
 
